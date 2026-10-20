@@ -13,12 +13,18 @@
 
 import axios from 'axios'
 
+// Game server base URL. Set GAME_SERVER_URL in config/dev.env.js / config/prod.env.js.
+// It must be https:// for the deployed site, or browsers block the requests.
+const GAME_SERVER = process.env.GAME_SERVER_URL
+
 export default {
   name: 'App',
   data () {
     return {
-      status: [],
-      username: localStorage.getItem('username')
+      status: { phase: '', question: '', timeLeftInPhase: 0, submissions: [] },
+      username: localStorage.getItem('username'),
+      errors: [],
+      refreshStatus: null
     }
   },
   // watch: {
@@ -30,10 +36,9 @@ export default {
   // },
   methods: {
     getStatusUpdate: function () {
-      axios.get(`http://circuslabs.net:6432/status`)
+      axios.get(`${GAME_SERVER}/status`)
         .then(response => {
           this.status = response.data
-          console.log(this.status)
         })
         .catch(e => {
           this.errors.push(e)
@@ -44,7 +49,7 @@ export default {
         localStorage.setItem('username', this.username)
     },
     upvoteSubmissions: function (index) {
-      axios.post(`http://circuslabs.net:6432/upvote/${index}`, {
+      axios.post(`${GAME_SERVER}/upvote/${index}`, {
         username: this.username
       })
       .then(response => {
@@ -57,7 +62,7 @@ export default {
     postGiphysToBackend: function (giphyURL) {
       console.log('app.js postGiphysToBackend()')
       console.log('send data', giphyURL, this.username)
-      axios.post(`http://circuslabs.net:6432/submission`, {
+      axios.post(`${GAME_SERVER}/submission`, {
         giphyURL: giphyURL,
         username: this.username
       })
@@ -70,8 +75,11 @@ export default {
     },
   },
   created: function () {
-    // this.getStatusUpdate()
-    let refreshStatus = setInterval(this.getStatusUpdate, 1000)
+    this.getStatusUpdate()
+    this.refreshStatus = setInterval(this.getStatusUpdate, 1000)
+  },
+  beforeDestroy: function () {
+    clearInterval(this.refreshStatus)
   },
 }
 </script>

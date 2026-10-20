@@ -15,21 +15,19 @@
         <p class="time-left">You have <span>{{Math.round(status.timeLeftInPhase/1000)}}s</span> left in this round</p>
         <h2 class="section-title-text">Choose your Giphy here:</h2>
         <div class="row">
-          <form class="col s12">
+          <form class="col s12" @submit.prevent="searchGiphyAPI">
             <div class="row username-input">
               <div class="input-field col s6">
-                <input v-model="searchTerm" id="last_name" type="text">
+                <input v-model.trim="searchTerm" id="giphy-search" type="text">
                 <label for="giphy-search">Search Giphy</label>
               </div>
-              <router-link to="/game">
-                <button type="submit" name="action" class="btn waves-effect waves-light" @click='searchGiphyAPI'>Submit</button>
-              </router-link>
+              <button type="submit" name="action" class="btn waves-effect waves-light">Submit</button>
             </div>
           </form>
         </div>
       </div>
 
-      <p v-if="status.submissions.length>0" class="after-submission">You've submitted a giphy. Good. Now submit some more.</p>
+      <p v-if="status.submissions && status.submissions.length > 0" class="after-submission">You've submitted a giphy. Good. Now submit some more.</p>
 
       <div class="headlines">
           <h2 class="section-title">Submitted:</h2>
@@ -84,6 +82,7 @@ export default {
       searchTerm: '',
       giphys: [],
       upvotes: [],
+      errors: []
     }
   },
   watch: {
@@ -109,7 +108,10 @@ export default {
         this.$emit('upvotegiphy', index)
     },
     searchGiphyAPI: function () {
-      axios.get(`http://api.giphy.com/v1/gifs/search?q=${this.searchTerm}&api_key=Rz9F7aWZ98K6wECZtpJw8QTBdThU1IFf&limit=8`)
+      if (!this.searchTerm) return
+      axios.get('https://api.giphy.com/v1/gifs/search', {
+        params: { q: this.searchTerm, api_key: 'Rz9F7aWZ98K6wECZtpJw8QTBdThU1IFf', limit: 8 }
+      })
         .then(response => {
           console.log(response)
           this.giphys = response.data.data

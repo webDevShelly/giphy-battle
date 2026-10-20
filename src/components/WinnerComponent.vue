@@ -6,7 +6,7 @@
       <h1 class="headline">Giphy Battle</h1>
       <div class="text">
         <h2 class="subline">And the winner for <span>#{{status.question}}</span> is:</h2>
-        <div v-if="status.submissions.length" class="submission-result">
+        <div v-if="status.submissions && status.submissions.length" class="submission-result">
           <img :src="status.submissions[0].giphyURL" class="submission-image">
           <div class="user-info">
             <p class="submitted-username">{{status.submissions[0].username}}, </p>
@@ -21,8 +21,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'WinnerScreen',
   data () {
@@ -39,7 +37,7 @@ export default {
   },
   methods: {
     timestampProcessor: function () {
-      let date = new Date(status.phaseStartTime * 1000)
+      let date = new Date(this.status.phaseStartTime * 1000)
       let hours = date.getHours()
       let minutes = '0' + date.getMinutes()
       let seconds = '0' + date.getSeconds()

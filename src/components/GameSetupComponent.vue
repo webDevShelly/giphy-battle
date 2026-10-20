@@ -13,15 +13,13 @@
           Then vote on which Giphys are the best. After each round, the winner is the Giphy with the most votes.
         </div>
         <div class="row">
-          <form class="col s12">
+          <form class="col s12" @submit.prevent="startGame">
             <div class="row username-input">
               <div class="input-field col s6">
-                <input v-model="username" id="last_name" type="text">
+                <input v-model.trim="username" id="username" type="text">
                 <label for="username">Username</label>
               </div>
-              <router-link to="/game">
-                <button :disabled="!usernameValid" type="submit" name="action" class="btn waves-effect waves-light">Submit</button>
-              </router-link>
+              <button :disabled="!usernameValid" type="submit" name="action" class="btn waves-effect waves-light">Submit</button>
             </div>
           </form>
         </div>
@@ -32,8 +30,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   name: 'GameSetup',
   data () {
@@ -49,9 +45,11 @@ export default {
       return false
     }
   },
-  watch: {
-    username: function () {
+  methods: {
+    startGame: function () {
+      if (!this.usernameValid) return
       this.$emit('usernameentered', this.username)
+      this.$router.push('/game')
     }
   }
 }
