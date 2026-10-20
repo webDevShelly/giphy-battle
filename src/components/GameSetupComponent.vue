@@ -8,9 +8,9 @@
       <div class="text">
         <h2 class="subline">How to play</h2>
         <div class="how-to-play">
-          Welcome to Giphy Battle - where you can battle players for the best Giphy out there!<br><br>
-          Watch the game screen to see the hashtag, then choose a Giphy to match it in the funniest, sickest, awesomest, or silliest way possible.
-          Then vote on which Giphys are the best. After each round, the winner is the Giphy with the most votes.
+          Welcome to Giphy Battle - where you battle it out for the best Giphy out there!<br><br>
+          Watch the game screen to see the hashtag, then choose Giphys to match it in the funniest, sickest, awesomest, or silliest way possible.
+          Then vote for your favorites. After each round, the winner is the Giphy with the most votes.
         </div>
         <div class="row">
           <form class="col s12" @submit.prevent="startGame">

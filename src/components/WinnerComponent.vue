@@ -13,6 +13,7 @@
             <p class="upvote-result"> upvoted <span class="upvote-amount">{{status.submissions[0].upvotes.length}}</span> times</p>
           </div>
         </div>
+        <p v-else class="no-submissions">No Giphys were submitted this round.</p>
         <p class="next-round">Get ready, the next round starts in: <span>{{Math.round(status.timeLeftInPhase/1000)}}s</span></p>
       </div>
     </div>
